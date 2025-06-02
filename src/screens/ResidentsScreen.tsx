@@ -1,52 +1,56 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { Searchbar, Card, Title, Paragraph, FAB, Portal, Dialog, Button, TextInput } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { mdiPencil, mdiDelete, mdiPlus } from '@mdi/js';
+import Svg, { Path } from 'react-native-svg';
 
-interface Resident {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-  status: string;
+interface IconProps {
+  path: string;
+  size?: number;
+  color?: string;
 }
+
+const Icon = ({ path, size = 24, color = '#000' }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Path d={path} fill={color} />
+  </Svg>
+);
 
 const ResidentsScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [visible, setVisible] = useState(false);
-  const [newResident, setNewResident] = useState({
-    name: '',
-    address: '',
-    phone: '',
-  });
-
-  const residents = [
+  const [residents] = useState([
     {
       id: '1',
       name: 'John Doe',
-      address: 'Jl. Contoh No. 1',
+      address: 'RT 01 / RW 05, No. 123',
       phone: '081234567890',
-      status: 'active',
     },
     {
       id: '2',
       name: 'Jane Smith',
-      address: 'Jl. Contoh No. 2',
+      address: 'RT 01 / RW 05, No. 124',
       phone: '081234567891',
-      status: 'active',
     },
-  ];
+  ]);
 
-  const renderResidentCard = ({ item }: { item: Resident }) => (
+  const showDialog = () => setVisible(true);
+  const hideDialog = () => setVisible(false);
+
+  const renderItem = ({ item }: { item: any }) => (
     <Card style={styles.residentCard}>
       <Card.Content>
-        <Title>{item.name}</Title>
-        <Paragraph>Alamat: {item.address}</Paragraph>
-        <Paragraph>Telepon: {item.phone}</Paragraph>
+        <Title style={{ color: '#333' }}>{item.name}</Title>
+        <Paragraph style={{ color: '#666' }}>{item.address}</Paragraph>
+        <Paragraph style={{ color: '#666' }}>{item.phone}</Paragraph>
       </Card.Content>
       <Card.Actions>
-        <Button icon="pencil" onPress={() => {}}>Edit</Button>
-        <Button icon="delete" onPress={() => {}}>Hapus</Button>
+        <Button icon={() => <Icon path={mdiPencil} color="#2196F3" />} textColor="#2196F3">
+          Edit
+        </Button>
+        <Button icon={() => <Icon path={mdiDelete} color="#F44336" />} textColor="#F44336">
+          Hapus
+        </Button>
       </Card.Actions>
     </Card>
   );
@@ -58,54 +62,56 @@ const ResidentsScreen = () => {
         onChangeText={setSearchQuery}
         value={searchQuery}
         style={styles.searchBar}
+        iconColor="#2196F3"
+        inputStyle={{ color: '#333' }}
+        placeholderTextColor="#666"
       />
 
       <FlatList
         data={residents}
-        renderItem={renderResidentCard}
+        renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
       />
 
+      <FAB
+        icon={() => <Icon path={mdiPlus} color="#FFFFFF" />}
+        style={styles.fab}
+        onPress={showDialog}
+      />
+
       <Portal>
-        <Dialog visible={visible} onDismiss={() => setVisible(false)}>
-          <Dialog.Title>Tambah Warga Baru</Dialog.Title>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>Tambah Warga</Dialog.Title>
           <Dialog.Content>
             <TextInput
+              mode="outlined"
               label="Nama"
-              value={newResident.name}
-              onChangeText={(text) => setNewResident({ ...newResident, name: text })}
               style={styles.input}
+              outlineColor="#E0E0E0"
+              activeOutlineColor="#2196F3"
             />
             <TextInput
+              mode="outlined"
               label="Alamat"
-              value={newResident.address}
-              onChangeText={(text) => setNewResident({ ...newResident, address: text })}
               style={styles.input}
+              outlineColor="#E0E0E0"
+              activeOutlineColor="#2196F3"
             />
             <TextInput
-              label="Telepon"
-              value={newResident.phone}
-              onChangeText={(text) => setNewResident({ ...newResident, phone: text })}
+              mode="outlined"
+              label="Nomor Telepon"
               style={styles.input}
-              keyboardType="phone-pad"
+              outlineColor="#E0E0E0"
+              activeOutlineColor="#2196F3"
             />
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setVisible(false)}>Batal</Button>
-            <Button onPress={() => {
-              // Handle adding new resident
-              setVisible(false);
-            }}>Simpan</Button>
+            <Button onPress={hideDialog} textColor="#2196F3">Batal</Button>
+            <Button onPress={hideDialog} textColor="#2196F3">Simpan</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
-
-      <FAB
-        style={styles.fab}
-        icon="plus"
-        onPress={() => setVisible(true)}
-      />
     </View>
   );
 };
@@ -113,11 +119,12 @@ const ResidentsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#fff',
   },
   searchBar: {
     margin: 16,
-    elevation: 4,
+    elevation: 2,
+    backgroundColor: '#fff',
   },
   listContainer: {
     padding: 16,
@@ -125,6 +132,7 @@ const styles = StyleSheet.create({
   residentCard: {
     marginBottom: 16,
     elevation: 2,
+    backgroundColor: '#fff',
   },
   fab: {
     position: 'absolute',
@@ -135,6 +143,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 12,
+    backgroundColor: '#fff',
   },
 });
 

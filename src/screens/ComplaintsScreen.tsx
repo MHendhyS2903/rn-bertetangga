@@ -1,42 +1,50 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Card, Title, Paragraph, Button, FAB, Portal, Dialog, TextInput, Chip } from 'react-native-paper';
+import { mdiPlus } from '@mdi/js';
+import Svg, { Path } from 'react-native-svg';
+
+interface IconProps {
+  path: string;
+  size?: number;
+  color?: string;
+}
+
+const Icon = ({ path, size = 24, color = '#000' }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Path d={path} fill={color} />
+  </Svg>
+);
 
 const ComplaintsScreen = () => {
   const [visible, setVisible] = useState(false);
-  const [complaint, setComplaint] = useState({
-    title: '',
-    description: '',
-    category: '',
-  });
-
-  const complaints = [
+  const [complaints] = useState([
     {
       id: '1',
-      title: 'Kebocoran Pipa Air',
-      description: 'Ada kebocoran pipa air di depan rumah nomor 15',
+      title: 'Lampu Jalan Mati',
+      description: 'Lampu jalan di depan rumah saya mati sejak 2 hari yang lalu.',
       category: 'Infrastruktur',
       status: 'pending',
-      date: '2024-06-01',
+      date: '2024-03-15',
     },
     {
       id: '2',
       title: 'Sampah Menumpuk',
-      description: 'Sampah belum diangkut selama 3 hari',
+      description: 'Sampah di depan kompleks belum diangkut selama 3 hari.',
       category: 'Kebersihan',
       status: 'in_progress',
-      date: '2024-06-02',
+      date: '2024-03-14',
     },
-  ];
+  ]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
         return '#FFA000';
       case 'in_progress':
-        return '#2196F3';
+        return '#1976D2';
       case 'resolved':
-        return '#4CAF50';
+        return '#388E3C';
       default:
         return '#757575';
     }
@@ -55,74 +63,72 @@ const ComplaintsScreen = () => {
     }
   };
 
+  const showDialog = () => setVisible(true);
+  const hideDialog = () => setVisible(false);
+
   return (
     <View style={styles.container}>
       <ScrollView>
-        {complaints.map((item) => (
-          <Card key={item.id} style={styles.card}>
+        {complaints.map((complaint) => (
+          <Card key={complaint.id} style={styles.card}>
             <Card.Content>
               <View style={styles.cardHeader}>
-                <Title>{item.title}</Title>
+                <Title style={{ color: '#333' }}>{complaint.title}</Title>
                 <Chip
-                  mode="outlined"
-                  style={[styles.statusChip, { borderColor: getStatusColor(item.status) }]}
-                  textStyle={{ color: getStatusColor(item.status) }}
+                  style={[styles.statusChip, { backgroundColor: getStatusColor(complaint.status) }]}
+                  textStyle={{ color: '#FFFFFF' }}
                 >
-                  {getStatusText(item.status)}
+                  {getStatusText(complaint.status)}
                 </Chip>
               </View>
-              <Paragraph style={styles.category}>{item.category}</Paragraph>
-              <Paragraph style={styles.description}>{item.description}</Paragraph>
-              <Paragraph style={styles.date}>{item.date}</Paragraph>
+              <Paragraph style={styles.category}>{complaint.category}</Paragraph>
+              <Paragraph style={[styles.description, { color: '#666' }]}>{complaint.description}</Paragraph>
+              <Paragraph style={styles.date}>{complaint.date}</Paragraph>
             </Card.Content>
-            <Card.Actions>
-              <Button onPress={() => {}}>Lihat Detail</Button>
-              <Button onPress={() => {}}>Update Status</Button>
-            </Card.Actions>
           </Card>
         ))}
       </ScrollView>
 
+      <FAB
+        icon={() => <Icon path={mdiPlus} color="#FFFFFF" />}
+        style={styles.fab}
+        onPress={showDialog}
+      />
+
       <Portal>
-        <Dialog visible={visible} onDismiss={() => setVisible(false)}>
-          <Dialog.Title>Buat Pengaduan Baru</Dialog.Title>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>Buat Pengaduan</Dialog.Title>
           <Dialog.Content>
             <TextInput
+              mode="outlined"
               label="Judul"
-              value={complaint.title}
-              onChangeText={(text) => setComplaint({ ...complaint, title: text })}
               style={styles.input}
+              outlineColor="#E0E0E0"
+              activeOutlineColor="#2196F3"
             />
             <TextInput
+              mode="outlined"
               label="Kategori"
-              value={complaint.category}
-              onChangeText={(text) => setComplaint({ ...complaint, category: text })}
               style={styles.input}
+              outlineColor="#E0E0E0"
+              activeOutlineColor="#2196F3"
             />
             <TextInput
+              mode="outlined"
               label="Deskripsi"
-              value={complaint.description}
-              onChangeText={(text) => setComplaint({ ...complaint, description: text })}
               multiline
               numberOfLines={4}
               style={styles.input}
+              outlineColor="#E0E0E0"
+              activeOutlineColor="#2196F3"
             />
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setVisible(false)}>Batal</Button>
-            <Button onPress={() => {
-              // Handle adding new complaint
-              setVisible(false);
-            }}>Kirim</Button>
+            <Button onPress={hideDialog} textColor="#2196F3">Batal</Button>
+            <Button onPress={hideDialog} textColor="#2196F3">Kirim</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
-
-      <FAB
-        style={styles.fab}
-        icon="plus"
-        onPress={() => setVisible(true)}
-      />
     </View>
   );
 };
@@ -130,11 +136,12 @@ const ComplaintsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#fff',
   },
   card: {
     margin: 16,
-    elevation: 4,
+    elevation: 2,
+    backgroundColor: '#fff',
   },
   cardHeader: {
     flexDirection: 'row',
@@ -143,14 +150,14 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   category: {
-    color: '#757575',
+    color: '#666',
     marginBottom: 8,
   },
   description: {
     marginBottom: 8,
   },
   date: {
-    color: '#757575',
+    color: '#666',
     fontSize: 12,
   },
   statusChip: {
@@ -165,6 +172,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 12,
+    backgroundColor: '#fff',
   },
 });
 

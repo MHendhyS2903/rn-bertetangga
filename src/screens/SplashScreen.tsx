@@ -1,20 +1,27 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { View, StyleSheet, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/types';
+import { mdiHomeCity } from '@mdi/js';
+import Svg, { Path } from 'react-native-svg';
 
-type RootStackParamList = {
-  Splash: undefined;
-  Login: undefined;
-};
+type SplashScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
 
-type SplashScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Splash'>;
-};
+interface IconProps {
+  path: string;
+  size?: number;
+  color?: string;
+}
 
-const SplashScreen = ({ navigation }: SplashScreenProps) => {
-  const theme = useTheme();
+const Icon = ({ path, size = 24, color = '#000' }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Path d={path} fill={color} />
+  </Svg>
+);
+
+const SplashScreen = () => {
+  const navigation = useNavigation<SplashScreenNavigationProp>();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -26,7 +33,7 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
 
   return (
     <View style={styles.container}>
-      <Icon name="home-city" size={100} color={theme.colors.primary} />
+      <Icon path={mdiHomeCity} size={80} color="#2196F3" />
       <Text style={styles.title}>RT/RW Digital</Text>
       <Text style={styles.subtitle}>Kelola RT/RW dengan Mudah</Text>
     </View>
@@ -36,19 +43,20 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 8,
+    color: '#333',
+    marginTop: 16,
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#666',
+    marginTop: 8,
   },
 });
 

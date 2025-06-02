@@ -2,6 +2,20 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Card, Title, Paragraph, Button, FAB, Portal, Dialog, TextInput } from 'react-native-paper';
 import { Calendar } from 'react-native-calendars';
+import { mdiPlus } from '@mdi/js';
+import Svg, { Path } from 'react-native-svg';
+
+interface IconProps {
+  path: string;
+  size?: number;
+  color?: string;
+}
+
+const Icon = ({ path, size = 24, color = '#000' }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Path d={path} fill={color} />
+  </Svg>
+);
 
 const EventsCalendarScreen = () => {
   const [visible, setVisible] = useState(false);
@@ -122,7 +136,7 @@ const EventsCalendarScreen = () => {
 
       <FAB
         style={styles.fab}
-        icon="plus"
+        icon={() => <Icon path={mdiPlus} size={24} color="#fff" />}
         onPress={() => setVisible(true)}
       />
     </View>
@@ -132,24 +146,27 @@ const EventsCalendarScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#fff',
   },
   calendarCard: {
     margin: 16,
-    elevation: 4,
+    elevation: 2,
+    backgroundColor: '#fff',
   },
   eventsTitle: {
     marginHorizontal: 16,
     marginTop: 8,
     marginBottom: 16,
+    color: '#333',
   },
   card: {
     margin: 16,
     marginTop: 0,
-    elevation: 4,
+    elevation: 2,
+    backgroundColor: '#fff',
   },
   dateTime: {
-    color: '#757575',
+    color: '#666',
     marginBottom: 4,
   },
   location: {
@@ -158,6 +175,7 @@ const styles = StyleSheet.create({
   },
   description: {
     marginBottom: 8,
+    color: '#333',
   },
   fab: {
     position: 'absolute',
@@ -168,6 +186,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 12,
+    backgroundColor: '#fff',
   },
 });
 

@@ -1,4 +1,4 @@
- /**
+/**
  * RT/RW Digital App
  */
 
@@ -8,14 +8,15 @@ import { PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { mdiHome, mdiAccountGroup, mdiCashMultiple, mdiMessageAlert, mdiAccount } from '@mdi/js';
 import { theme } from './src/theme/theme';
+import Icon from './src/components/Icon/index';
 
 // Import screens
 import SplashScreen from './src/screens/SplashScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
-import HomeScreen from './src/screens/HomeScreen';
+import HomeScreen from './src/screens/home/HomeScreen';
 import ResidentsScreen from './src/screens/ResidentsScreen';
 import FinanceScreen from './src/screens/FinanceScreen';
 import ComplaintsScreen from './src/screens/ComplaintsScreen';
@@ -24,26 +25,66 @@ import ProfileScreen from './src/screens/ProfileScreen';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const HomeIcon = ({ color, size }: { color: string; size: number }) => (
+  <Icon path={mdiHome} color={color} size={size} />
+);
+
+const ResidentsIcon = ({ color, size }: { color: string; size: number }) => (
+  <Icon path={mdiAccountGroup} color={color} size={size} />
+);
+
+const FinanceIcon = ({ color, size }: { color: string; size: number }) => (
+  <Icon path={mdiCashMultiple} color={color} size={size} />
+);
+
+const ComplaintsIcon = ({ color, size }: { color: string; size: number }) => (
+  <Icon path={mdiMessageAlert} color={color} size={size} />
+);
+
+const ProfileIcon = ({ color, size }: { color: string; size: number }) => (
+  <Icon path={mdiAccount} color={color} size={size} />
+);
+
 const MainTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.disabled,
+        tabBarActiveTintColor: '#F4631E',
+        tabBarInactiveTintColor: '#ffffff',
         tabBarStyle: {
-          backgroundColor: theme.colors.surface,
-          borderTopWidth: 1,
-          borderTopColor: '#E0E0E0',
+          backgroundColor: '#F79B72',
+          borderTopWidth: 0.5,
+          borderTopColor: '#DBDBDB',
           paddingBottom: 5,
           paddingTop: 5,
           height: 60,
+          elevation: 8,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 0,
+          },
+          shadowOpacity: 0.2,
+          shadowRadius: 4,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          borderLeftWidth: 0.5,
+          borderRightWidth: 0.5,
+          borderLeftColor: '#DBDBDB',
+          borderRightColor: '#DBDBDB',
+          marginHorizontal: 10,
+          overflow: 'hidden',
         },
         headerStyle: {
           backgroundColor: theme.colors.primary,
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: 'bold' as const,
         },
       }}
     >
@@ -51,45 +92,36 @@ const MainTabs = () => {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="home" color={color} size={size} />
-          ),
+          headerShown: false,
+          tabBarIcon: HomeIcon,
         }}
       />
       <Tab.Screen
         name="Residents"
         component={ResidentsScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="account-group" color={color} size={size} />
-          ),
+          tabBarIcon: ResidentsIcon,
         }}
       />
       <Tab.Screen
         name="Finance"
         component={FinanceScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="cash-multiple" color={color} size={size} />
-          ),
+          tabBarIcon: FinanceIcon,
         }}
       />
       <Tab.Screen
         name="Complaints"
         component={ComplaintsScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="message-alert" color={color} size={size} />
-          ),
+          tabBarIcon: ComplaintsIcon,
         }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="account" color={color} size={size} />
-          ),
+          tabBarIcon: ProfileIcon,
         }}
       />
     </Tab.Navigator>

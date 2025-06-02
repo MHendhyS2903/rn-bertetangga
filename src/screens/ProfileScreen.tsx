@@ -1,14 +1,27 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { Card, Title, Paragraph, Button, Avatar, List } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { mdiAccount, mdiEmail, mdiPhone, mdiMapMarker, mdiLogout } from '@mdi/js';
+import Svg, { Path } from 'react-native-svg';
+
+interface IconProps {
+  path: string;
+  size?: number;
+  color?: string;
+}
+
+const Icon = ({ path, size = 24, color = '#000' }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Path d={path} fill={color} />
+  </Svg>
+);
 
 const ProfileScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <Card style={styles.profileCard}>
         <Card.Content style={styles.profileContent}>
-          <Avatar.Icon size={80} icon="account" style={styles.avatar} />
+          <Avatar.Icon size={80} icon={() => <Icon path={mdiAccount} size={40} color="#fff" />} style={styles.avatar} />
           <Title style={styles.name}>John Doe</Title>
           <Paragraph style={styles.role}>Ketua RT</Paragraph>
         </Card.Content>
@@ -19,24 +32,24 @@ const ProfileScreen = () => {
           <List.Item
             title="Email"
             description="john.doe@example.com"
-            left={props => <List.Icon {...props} icon="email" />}
+            left={props => <Icon path={mdiEmail} size={24} color={props.color} />}
           />
           <List.Item
             title="Telepon"
             description="081234567890"
-            left={props => <List.Icon {...props} icon="phone" />}
+            left={props => <Icon path={mdiPhone} size={24} color={props.color} />}
           />
           <List.Item
             title="Alamat"
             description="Jl. Contoh No. 1, RT 01/RW 05"
-            left={props => <List.Icon {...props} icon="map-marker" />}
+            left={props => <Icon path={mdiMapMarker} size={24} color={props.color} />}
           />
         </Card.Content>
       </Card>
 
       <Button
         mode="contained"
-        icon="logout"
+        icon={() => <Icon path={mdiLogout} size={24} color="#fff" />}
         onPress={() => {}}
         style={styles.logoutButton}
       >
@@ -49,11 +62,12 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#fff',
   },
   profileCard: {
     margin: 16,
-    elevation: 4,
+    elevation: 2,
+    backgroundColor: '#fff',
   },
   profileContent: {
     alignItems: 'center',
@@ -66,6 +80,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#333',
   },
   role: {
     color: '#666',
@@ -74,11 +89,13 @@ const styles = StyleSheet.create({
   infoCard: {
     margin: 16,
     marginTop: 0,
-    elevation: 4,
+    elevation: 2,
+    backgroundColor: '#fff',
   },
   logoutButton: {
     margin: 16,
     marginTop: 0,
+    backgroundColor: '#F44336',
   },
 });
 

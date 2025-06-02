@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Card, Title, Paragraph, Button, DataTable, FAB, Portal, Dialog, TextInput } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { mdiPlus } from '@mdi/js';
+import Svg, { Path } from 'react-native-svg';
+
+interface IconProps {
+  path: string;
+  size?: number;
+  color?: string;
+}
+
+const Icon = ({ path, size = 24, color = '#000' }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Path d={path} fill={color} />
+  </Svg>
+);
 
 const FinanceScreen = () => {
   const [visible, setVisible] = useState(false);
@@ -140,7 +153,7 @@ const FinanceScreen = () => {
 
       <FAB
         style={styles.fab}
-        icon="plus"
+        icon={() => <Icon path={mdiPlus} size={24} color="#fff" />}
         onPress={() => setVisible(true)}
       />
     </View>
@@ -150,7 +163,7 @@ const FinanceScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#fff',
   },
   summaryContainer: {
     flexDirection: 'row',
@@ -160,6 +173,7 @@ const styles = StyleSheet.create({
   summaryCard: {
     flex: 1,
     margin: 4,
+    elevation: 2,
   },
   summaryTitle: {
     color: '#fff',
@@ -172,10 +186,12 @@ const styles = StyleSheet.create({
   },
   tableCard: {
     margin: 16,
-    elevation: 4,
+    elevation: 2,
+    backgroundColor: '#fff',
   },
   tableTitle: {
     marginBottom: 16,
+    color: '#333',
   },
   fab: {
     position: 'absolute',
@@ -186,6 +202,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 12,
+    backgroundColor: '#fff',
   },
 });
 
