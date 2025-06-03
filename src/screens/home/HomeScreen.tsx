@@ -15,10 +15,10 @@ const HomeScreen = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <BalanceCard balance={rtBalance} />
+        {/* <BalanceCard balance={rtBalance} /> */}
         <QuickActions />
-        <AnnouncementsMinimal />
         <UpcomingEvents />
+        <AnnouncementsMinimal />
         <RecentPayments />
       </ScrollView>
     </View>
